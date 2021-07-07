@@ -6,6 +6,7 @@ import axios from 'axios';
 import ShowError from './ShowError';
 import WheatherTable from './wheather';
 import Movies from './Movies';
+import ErrorWeather from './ErrorWeather';
 
 
 class Main extends React.Component {
@@ -20,6 +21,7 @@ class Main extends React.Component {
             showError: false,
             wheather: {},
             showWheather: false,
+            errorWeather: false,
             showMovies: false,
             movies: {}
         }
@@ -50,7 +52,7 @@ class Main extends React.Component {
             try {
                 let cityName = this.state.jsonData.display_name.split(",")[0]
 
-                let myServer = `${process.env.REACT_APP_SERVER_LINK}wheather?city=${cityName}`
+                let myServer = `${process.env.REACT_APP_SERVER_LINK}wheatherJSON?city=${cityName}`
                 let myServerData = await axios.get(myServer);
 
                 await this.setState({
@@ -59,19 +61,22 @@ class Main extends React.Component {
 
                 if (this.state.wheather.data.length !== 0) {
                     await this.setState({
-                        showWheather: true
+                        showWheather: true,
+                        errorWeather: false
                     })
                 } else {
                     await this.setState({
-                        showWheather: false
+                        showWheather: false,
+                        errorWeather: true
                     })
                 }
-                // console.log(myServerData.data);
+                console.log(myServerData.data);
 
 
             } catch {
                 await this.setState({
-                    showWheather: false
+                    showWheather: false,
+                    errorWeather: true
                 })
             }
 
@@ -128,13 +133,18 @@ class Main extends React.Component {
                     (this.state.showWheather ? <WheatherTable wheatherData={this.state.wheather} showWheather={this.state.showWheather} cityInfo={this.state.jsonData} /> : null)
                 }
 
+                {
+                    this.state.errorWeather &&
+                    <ErrorWeather />
+                }
+
                 {this.state.showMap &&
                     <Map setZoom={this.setZoom} zoom={this.state.zoom} lon={this.state.jsonData.lon} lat={this.state.jsonData.lat} />
                 }
 
-                {this.state.showMovies &&
+                {/* {this.state.showMovies &&
                 <Movies moviesObject={this.state.movies} />
-                }
+                } */}
 
                 {this.state.showError &&
                     <ShowError />
