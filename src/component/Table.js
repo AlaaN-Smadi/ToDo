@@ -2,9 +2,7 @@ import React from 'react';
 import Table from 'react-bootstrap/Table';
 
 class TablePage extends React.Component {
-    constructor(props) {
-        super(props)
-    }
+    
     render() {
         return (
             <div style={{ marginLeft: "25%", marginRight: "25%", textAlign: "center", backgroundColor: "#4b4ca3", opacity: "0.6" }}>
